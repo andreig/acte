@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-
+// import { useRouter } from "next/navigation";
 interface SearchBoxProps {
   value: string;
   onChange: (value: string) => void;

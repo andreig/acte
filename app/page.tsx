@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+//import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
@@ -46,7 +46,7 @@ export default function Home() {
     setFilters({ judet: "all", categorie: "all", institutie: "all", tip: "all", format: "all" });
   };
 
-  const updateFilter = (field, value) => {
+  const updateFilter = (field: string, value: string) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -61,13 +61,12 @@ export default function Home() {
     const institutieFilter = normalize(filters.institutie);
     const tipFilter = normalize(filters.tip);
     const formatFilter = filters.format;
-
     return (
-      (normalize(form.titlu).includes(query) ||
-        normalize(form.descriere).includes(query) ||
-        normalize(form.categorie).includes(query) ||
-        normalize(form.judet).includes(query)) &&
-      (filters.judet === "all" || normalize(form.judet) === judetFilter || normalize(form.judet) === "national") &&
+      (normalize(form.titlu || '').includes(query) ||
+        normalize(form.descriere || '').includes(query) ||
+        normalize(form.categorie || '').includes(query) ||
+        normalize(form.judet || '').includes(query)) &&
+      (filters.judet === "all" || normalize(form.judet || '') === judetFilter || normalize(form.judet || '') === "national") &&
       (filters.categorie === "all" || normalize(form.categorie) === categorieFilter) &&
       (filters.institutie === "all" || (form.institutie && normalize(form.institutie).includes(institutieFilter))) &&
       (filters.tip === "all" || (form.titlu && normalize(form.titlu).includes(tipFilter))) &&
