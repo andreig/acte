@@ -1,6 +1,5 @@
 "use client";
 
-//import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
@@ -10,12 +9,22 @@ import SidebarFilters from "@/components/SidebarFilters";
 import SearchBox from "@/components/SearchBox";
 import FormCard from "@/components/FormCard";
 
+type FormItem = {
+  titlu: string;
+  descriere: string;
+  categorie: string;
+  judet: string;
+  institutie: string;
+  popularitate?: number;
+  links?: { link: string; format: string; titlu: string; data_actualizare?: string }[];
+};
+
 export default function Home() {
   const router = useRouter();
   const params = useSearchParams();
 
   const [search, setSearch] = useState(params.get("q") || "");
-  const [forms, setForms] = useState([]);
+  const [forms, setForms] = useState<FormItem[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [filters, setFilters] = useState({
@@ -39,14 +48,15 @@ export default function Home() {
       if (v !== "all") query.set(k, v);
     });
     router.replace(query.toString() ? `/?${query.toString()}` : "/");
-  }, [search, filters]);
+  }, [search, filters, router]);
 
   const resetFilters = () => {
     setSearch("");
     setFilters({ judet: "all", categorie: "all", institutie: "all", tip: "all", format: "all" });
   };
 
-  const updateFilter = (field: string, value: string) => {
+  type FilterField = keyof typeof filters;
+  const updateFilter = (field: FilterField, value: string) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -54,26 +64,27 @@ export default function Home() {
     str.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
   const filteredForms = forms
-  .filter((form) => {
-    const query = normalize(search);
-    const judetFilter = normalize(filters.judet);
-    const categorieFilter = normalize(filters.categorie);
-    const institutieFilter = normalize(filters.institutie);
-    const tipFilter = normalize(filters.tip);
-    const formatFilter = filters.format;
-    return (
-      (normalize(form.titlu || '').includes(query) ||
-        normalize(form.descriere || '').includes(query) ||
-        normalize(form.categorie || '').includes(query) ||
-        normalize(form.judet || '').includes(query)) &&
-      (filters.judet === "all" || normalize(form.judet || '') === judetFilter || normalize(form.judet || '') === "national") &&
-      (filters.categorie === "all" || normalize(form.categorie) === categorieFilter) &&
-      (filters.institutie === "all" || (form.institutie && normalize(form.institutie).includes(institutieFilter))) &&
-      (filters.tip === "all" || (form.titlu && normalize(form.titlu).includes(tipFilter))) &&
-      (filters.format === "all" || form.links?.some((l) => l.format === formatFilter))
-    );
-  })
-  .sort((a, b) => (b.popularitate || 0) - (a.popularitate || 0));
+    .filter((form) => {
+      const query = normalize(search);
+      const judetFilter = normalize(filters.judet);
+      const categorieFilter = normalize(filters.categorie);
+      const institutieFilter = normalize(filters.institutie);
+      const tipFilter = normalize(filters.tip);
+      const formatFilter = filters.format;
+
+      return (
+        (normalize(form.titlu).includes(query) ||
+          normalize(form.descriere).includes(query) ||
+          normalize(form.categorie).includes(query) ||
+          normalize(form.judet).includes(query)) &&
+        (filters.judet === "all" || normalize(form.judet) === judetFilter || normalize(form.judet) === "național") &&
+        (filters.categorie === "all" || normalize(form.categorie) === categorieFilter) &&
+        (filters.institutie === "all" || (form.institutie && normalize(form.institutie).includes(institutieFilter))) &&
+        (filters.tip === "all" || (form.titlu && normalize(form.titlu).includes(tipFilter))) &&
+        (filters.format === "all" || form.links?.some((l) => l.format === formatFilter))
+      );
+    })
+    .sort((a, b) => (b.popularitate || 0) - (a.popularitate || 0));
 
   const categoriiUnice = [...new Set(forms.map((f) => f.categorie))];
   const judeteUnice = [...new Set(forms.map((f) => f.judet))];
@@ -110,16 +121,21 @@ export default function Home() {
           {filteredForms.length} rezultate găsite
         </p>
 
-        {search === "" && filters.judet === "all" && filters.categorie === "all" && filters.institutie === "all" && filters.tip === "all" && filters.format === "all" && (
-          <div className="mb-10">
-            <h2 className="text-xl font-semibold mb-4">Formulare recomandate</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {forms.slice(0, 6).map((form, idx) => (
-                <FormCard key={`rec-${idx}`} form={form} />
-              ))}
+        {search === "" &&
+          filters.judet === "all" &&
+          filters.categorie === "all" &&
+          filters.institutie === "all" &&
+          filters.tip === "all" &&
+          filters.format === "all" && (
+            <div className="mb-10">
+              <h2 className="text-xl font-semibold mb-4">Formulare recomandate</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {forms.slice(0, 6).map((form, idx) => (
+                  <FormCard key={`rec-${idx}`} form={form} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredForms.length === 0 ? (

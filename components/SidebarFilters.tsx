@@ -17,7 +17,7 @@ interface SidebarFiltersProps {
     tipuriFormulare: string[];
     formateUnice: string[];
   };
-  onChange: (field: string, value: string) => void;
+  onChange: (field: "judet" | "categorie" | "institutie" | "tip" | "format", value: string) => void;
   onReset: () => void;
   sidebarOpen: boolean;
 }
