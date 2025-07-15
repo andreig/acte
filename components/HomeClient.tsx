@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import SidebarFilters from "@/components/SidebarFilters";
 import SearchBox from "@/components/SearchBox";
 import FormCard from "@/components/FormCard";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type FormItem = {
   titlu: string;
@@ -105,14 +106,17 @@ export default function HomeClient() {
       <div className="flex-1 p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold">Catalog formulare</h1>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden"
-          >
-            <Menu className="w-6 h-6" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="md:hidden"
+            >
+              <Menu className="w-6 h-6" />
+            </Button>
+          </div>
         </div>
 
         <SearchBox value={search} onChange={setSearch} />

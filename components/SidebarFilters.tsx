@@ -27,13 +27,13 @@ export default function SidebarFilters({ filters, options, onChange, onReset, si
 
   return (
     <aside
-      className={`transition-all duration-300 p-4 w-72 bg-gray-100 h-screen overflow-y-auto border-r
+      className={`transition-all duration-300 p-4 w-72 bg-muted/50 h-screen overflow-y-auto border-r
       ${sidebarOpen ? "block" : "hidden"} md:block`}
     >
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-1">
           <Filter className="w-4 h-4" /> Filtre
-          {filtersActive && <span className="text-sm bg-blue-100 text-blue-800 rounded px-2 ml-1">active</span>}
+          {filtersActive && <span className="text-sm bg-primary/10 text-primary rounded px-2 ml-1">active</span>}
         </h2>
         <Button variant="ghost" size="icon" onClick={onReset} title="Resetează filtre">
           <RotateCcw className="w-4 h-4" />
