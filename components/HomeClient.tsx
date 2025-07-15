@@ -89,7 +89,7 @@ export default function HomeClient() {
   const categoriiUnice = [...new Set(forms.map((f) => f.categorie))];
   const judeteUnice = [...new Set(forms.map((f) => f.judet))];
   const institutiiUnice = [...new Set(forms.map((f) => f.institutie))];
-  const formateUnice = [".pdf", ".docx"];
+  const formateUnice = ["pdf", "docx"];
   const tipuriFormulare = ["cerere", "contract", "declarație"];
 
   return (

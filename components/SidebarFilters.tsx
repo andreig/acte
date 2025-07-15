@@ -78,7 +78,7 @@ export default function SidebarFilters({ filters, options, onChange, onReset, si
           <SelectTrigger><SelectValue placeholder="Format" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Toate formatele</SelectItem>
-            {options.formateUnice.map((f) => <SelectItem key={f} value={f}>{f.toUpperCase().replace(".", "")}</SelectItem>)}
+            {options.formateUnice.map((f) => <SelectItem key={f} value={f}>{f.toUpperCase()}</SelectItem>)}
           </SelectContent>
         </Select>
       </div>
